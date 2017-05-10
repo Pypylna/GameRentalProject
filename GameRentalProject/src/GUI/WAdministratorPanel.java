@@ -12,14 +12,30 @@ public class WAdministratorPanel extends JFrame implements ActionListener {
         setSize(1000, 500);
         setTitle("Game Rental");
         setLayout(null);
+
+        //Add new item to the data base
+        bAdd = new JButton("Add new position");
+        bAdd.setBounds(20, 30, 300, 50);
+        add(bAdd);
+        bAdd.addActionListener(this);
+
+        //Search for the item in data base
+        bSearch = new JButton("Search for the position");
+        bSearch.setBounds(20, 90, 300, 50);
+        add(bSearch);
+        bSearch.addActionListener(this);
     }
         @Override
         public void actionPerformed(ActionEvent e){
         Object source = e.getSource();
 
             if(source==bAdd) {
+                WAdding wAdding = new WAdding();
+                wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                wAdding.setVisible(true);
             }
             else if(source==bSearch) {
+                //TODO: 2017-05-10
             }
         }
 
