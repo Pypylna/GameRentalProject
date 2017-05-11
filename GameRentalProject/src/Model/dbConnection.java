@@ -69,6 +69,7 @@ public class dbConnection {
                 polaczenie = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
      
                 stat = polaczenie.createStatement();
+                //#TODO automatyczne nadawanie id
                 String dodajSQL = "INSERT INTO " + "game" + " (ID, name, worth) "
                         + "VALUES ("
                         + game.getId() + ","
