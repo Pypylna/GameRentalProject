@@ -1,24 +1,25 @@
 package Model;
-import  Entity.Game;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+
+import Entity.Game;
 
 public class dbConnection {
 	
 	private static String dbName = "GameRentalDb";
 
-	public static void main(String[] args) {
-        // Wywo³anie metody connect, która zwraca obiekt typu Connection
-        Connection polaczenie = connect();      
-        //createDb(polaczenie);    //<- utworzyc jesli baza pusta
-        Game gra1 = new Game();
-        gra1.setId(1);
-        gra1.setName("Carcassonne");
-        gra1.setWorth(70);
-        addGameToDb(gra1);
-        
-    }
+//	public static void main(String[] args) {
+//        // Wywo³anie metody connect, która zwraca obiekt typu Connection
+//
+//        try{
+//        	int newId = Game.getFirstFreeId();
+//        	System.out.println(newId);
+//        }catch (Exception e) {
+//            System.out.println("jakis blad " + e.getMessage());
+//        }
+//        
+//    }
     
     /**
      * Metoda odpowiedzialna za po³¹czenie z baz¹
@@ -39,14 +40,14 @@ public class dbConnection {
         return polaczenie;
     }
 	
-    //funkcja tworz¹ca wszystkie tabele bazy (puste)
+    //funkcja tworz¹ca wszystkie tabele bazy (puste) -> #TODO dodaæ jakiegoœ ifa, ¿eby nie wykonywa³ wszystkich instrukcji, jeœli jest coœ w bazie
     public static void createDb(Connection polaczenie) {
         // Obiekt odpowiadaj¹cy za wykonanie instrukcji
             Statement stat = null;
             try {
                 stat = polaczenie.createStatement();
                 // polecenie SQL tworz¹ce tabelê game
-                String tabelaSQL = "CREATE TABLE " + "game"
+                String tabelaSQL = "CREATE TABLE IF NOT EXISTS " + "game"
                         + " (ID INT PRIMARY KEY     NOT NULL,"
                         + " name           CHAR(50)    NOT NULL, "
                         + " worth          INT) ";
@@ -61,28 +62,7 @@ public class dbConnection {
         }
     	
     //Uwaga, przy wielu danych i bazach na serwerach, efektywniej jest robiæ kilka insertów na jednym po³¹czeniu, zamiast co chwila otwieraæ i zamykaæ kolejne po³¹czenia
-        public static void addGameToDb(Game game) {
-            Connection polaczenie = null;
-            Statement stat = null;
-            try {
-                Class.forName("org.sqlite.JDBC");
-                polaczenie = DriverManager.getConnection("jdbc:sqlite:" + dbName + ".db");
-     
-                stat = polaczenie.createStatement();
-                //#TODO automatyczne nadawanie id
-                String dodajSQL = "INSERT INTO " + "game" + " (ID, name, worth) "
-                        + "VALUES ("
-                        + game.getId() + ","
-                        + "'" + game.getName() + "',"
-                        + + game.getWorth()
-                        + "  );";
-                stat.executeUpdate(dodajSQL);
-                stat.close();
-                polaczenie.close();
-                // Komunikat i wydrukowanie koñcowej formy polecenia SQL
-                System.out.println("Polecenie: \n" + dodajSQL + "\n wykonane.");
-            } catch (Exception e) {
-                System.out.println("Nie mogê dodaæ danych " + e.getMessage());
-            }
-    }
+
+        
+
 }
