@@ -1,27 +1,33 @@
 package GUI;
 
 import javax.swing.*;
+import Entity.Game;
 
 import java.awt.Button;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class WAdding extends JFrame {
+public class WAdding extends JFrame implements ActionListener {
 
-    private JLabel lItem;
-    private JTextField tItem;
+    private JLabel titleLabel, nameLabel, worthLabel;
+    private JTextField nameTextField ;
+    private JFormattedTextField worthTextField;
+    private JButton addButton;
 
     WAdding() {
         setSize(500, 500);
         setTitle("Game Rental - Adding game");
         GroupLayout layout = new GroupLayout(getContentPane());
         setLayout(layout);
-        
-        JLabel titleLabel = new JLabel("Add game");
-        JLabel nameLabel = new JLabel("Name");
-        JTextField	nameTextField = new JTextField();
-        JLabel worthLabel = new JLabel("Worth");
-        JTextField	worthTextField = new JTextField();
+        titleLabel = new JLabel("Add game");
+        nameLabel = new JLabel("Name");
+        nameTextField = new JTextField();
+        worthLabel = new JLabel("Worth");
+        worthTextField = new JFormattedTextField();
+        worthTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        addButton = new JButton("Dodaj");
+        addButton.addActionListener(this);
 
         layout.setVerticalGroup(
             layout.createSequentialGroup()
@@ -33,6 +39,8 @@ public class WAdding extends JFrame {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(worthLabel)
                     .addComponent(worthTextField))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton))
 
         );
 
@@ -46,11 +54,29 @@ public class WAdding extends JFrame {
                 		                .addComponent(worthLabel))
                 		        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 		            	.addComponent(nameTextField)
-                		              	.addComponent(worthTextField))
+                		              	.addComponent(worthTextField)
+                                        .addComponent(addButton))
 		            )))
 
         ;
 
         //TODO Dodać odpowiednie pola tekstowe i etykiety do wpisywania danych do bazy
+    }
+    @Override
+    public void actionPerformed(ActionEvent e){
+    Object source = e.getSource();
+
+        if(source==addButton) {
+        	Game newGame = new Game();
+        	newGame.setName(nameTextField.getText());
+        	newGame.addGameToDb();
+        	System.out.println("costam");
+//        	newGame.setWorth(worthTextField.getText().toFloat());
+        	
+        	
+            WAdding wAdding = new WAdding();
+            wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            wAdding.setVisible(true);
+        }
     }
 }
