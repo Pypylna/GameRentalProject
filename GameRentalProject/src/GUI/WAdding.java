@@ -2,17 +2,19 @@ package GUI;
 
 import javax.swing.*;
 import Entity.Game;
+import Validators.NumericValidator;
 
 import java.awt.Button;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.*;
 
 public class WAdding extends JFrame implements ActionListener {
 
     private JLabel titleLabel, nameLabel, worthLabel;
     private JTextField nameTextField ;
-    private JFormattedTextField worthTextField;
+    private JTextField worthTextField;
     private JButton addButton;
 
     WAdding() {
@@ -24,8 +26,8 @@ public class WAdding extends JFrame implements ActionListener {
         nameLabel = new JLabel("Name");
         nameTextField = new JTextField();
         worthLabel = new JLabel("Worth");
-        worthTextField = new JFormattedTextField();
-        worthTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getCurrencyInstance())));
+        worthTextField = new JTextField();
+        //#TODO dodaæ walidacjê danych w GUI
         addButton = new JButton("Dodaj");
         addButton.addActionListener(this);
 
@@ -67,12 +69,29 @@ public class WAdding extends JFrame implements ActionListener {
     Object source = e.getSource();
 
         if(source==addButton) {
-        	Game newGame = new Game();
-        	newGame.setName(nameTextField.getText());
-        	newGame.addGameToDb();
-        	System.out.println("costam");
-//        	newGame.setWorth(worthTextField.getText().toFloat());
+//        	System.out.println(worthTextField.getText());
         	
+//        	newGame.setWorth(worthTextField.getText().toFloat());
+        	//validation
+
+        	
+        	//walidacja danych
+        	if(NumericValidator.verifyAmount(worthTextField.getText())){
+        		
+        		//konwersja otrzymanych dane na dane do db
+        		String amountString = worthTextField.getText().replaceAll(",", ".");
+        		Float amount = Float.parseFloat(amountString);
+        		
+            	Game newGame = new Game();
+            	newGame.setName(nameTextField.getText());
+            	newGame.setWorth(amount);
+
+            	newGame.addGameToDb();
+            	//#TODO notice o dodaniu do bazy
+        	}else{
+        		//#TODO odpowiednie notice'y
+            	System.out.println("informacja o b³êdzie w otrzymanych danych");
+        	}
         	
             WAdding wAdding = new WAdding();
             wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -80,3 +99,6 @@ public class WAdding extends JFrame implements ActionListener {
         }
     }
 }
+
+
+
