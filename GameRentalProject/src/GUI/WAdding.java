@@ -27,7 +27,7 @@ public class WAdding extends JFrame implements ActionListener {
         nameTextField = new JTextField();
         worthLabel = new JLabel("Worth");
         worthTextField = new JTextField();
-        //#TODO dodaæ walidacjê danych w GUI
+        
         addButton = new JButton("Dodaj");
         addButton.addActionListener(this);
 
@@ -87,15 +87,17 @@ public class WAdding extends JFrame implements ActionListener {
             	newGame.setWorth(amount);
 
             	newGame.addGameToDb();
-            	//#TODO notice o dodaniu do bazy
+            	JOptionPane.showMessageDialog(null,"Pozycja dodana do bazy danych");
+            	
+                WAdding wAdding = new WAdding();
+                wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                wAdding.setVisible(true);
         	}else{
-        		//#TODO odpowiednie notice'y
-            	System.out.println("informacja o b³êdzie w otrzymanych danych");
+        		//#TODO lepsze notice'y
+//            	System.out.println("informacja o b³êdzie w otrzymanych danych");
+            	JOptionPane.showMessageDialog(null,"Wprowadzone dane s¹ nieprawid³owe");
         	}
         	
-            WAdding wAdding = new WAdding();
-            wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            wAdding.setVisible(true);
         }
     }
 }

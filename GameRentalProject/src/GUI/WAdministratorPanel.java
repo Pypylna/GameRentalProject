@@ -35,7 +35,11 @@ public class WAdministratorPanel extends JFrame implements ActionListener {
                 wAdding.setVisible(true);
             }
             else if(source==bSearch) {
-                //TODO: 2017-05-10
+            	WSearching wSearching = new WSearching();
+            	wSearching.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            	wSearching.setVisible(true);
+                
+            	//TODO: 2017-05-10
             }
         }
 
