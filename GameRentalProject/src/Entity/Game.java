@@ -48,7 +48,7 @@ public class Game {
         Statement stat = null;
         try {
             stat = polaczenie.createStatement();
-            //#TODO automatyczne nadawanie id
+            // automatyczne nadawanie id
             String dodajSQL = "INSERT INTO " + "game" + " (ID, name, worth) "
                     + "VALUES ("
                     + this.getId() + ","
@@ -73,7 +73,7 @@ public class Game {
         Statement stat = null;
         try {
             stat = polaczenie.createStatement();
-            //#TODO automatyczne nadawanie id
+            //automatyczne nadawanie id
             String SQL = "SELECT MAX(id) AS max FROM game";
             
             ResultSet wynik = stat.executeQuery(SQL);

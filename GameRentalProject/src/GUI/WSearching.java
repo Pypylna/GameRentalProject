@@ -1,8 +1,14 @@
 package GUI;
 
 import javax.swing.*;
+
 import Entity.Game;
+import Repository.GameRepository;
 import Validators.NumericValidator;
+import TableModels.GameTableModel;
+
+import java.util.List;
+import java.util.ArrayList;
 
 import java.awt.Button;
 import java.awt.Container;
@@ -16,6 +22,8 @@ public class WSearching extends JFrame implements ActionListener {
     private JTextField nameTextField ;
     private JTextField worthMaxTextField, worthMinTextField;
     private JButton searchButton;
+    private JTable gamesTable;
+    private GameTableModel gameTModel;
 
     WSearching() {
         setSize(500, 500);
@@ -34,6 +42,9 @@ public class WSearching extends JFrame implements ActionListener {
         
         searchButton = new JButton("Search");
         searchButton.addActionListener(this);
+        
+        gameTModel = new GameTableModel();
+        gamesTable = new JTable(gameTModel);
 
         layout.setVerticalGroup(
             layout.createSequentialGroup()
@@ -49,7 +60,9 @@ public class WSearching extends JFrame implements ActionListener {
                     .addComponent(worthMinLabel)
                     .addComponent(worthMinTextField))
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                        .addComponent(searchButton))
+                    .addComponent(searchButton))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(gamesTable))
 
         );
 
@@ -66,32 +79,49 @@ public class WSearching extends JFrame implements ActionListener {
                 		            	.addComponent(nameTextField)
                 		              	.addComponent(worthMaxTextField)
                 		              	.addComponent(worthMinTextField)
-                                        .addComponent(searchButton))
+                                        .addComponent(searchButton)
+                                        .addComponent(gamesTable))
 		            )))
 
         ;
+        
+        //TODO dlaczego nie wyœwietla siê gamesTable???
 
         //TODO DodaÄ‡ odpowiednie pola tekstowe i etykiety do wpisywania danych do bazy
     }
     @Override
     public void actionPerformed(ActionEvent e){
     	Object source = e.getSource();
-    	//TODO add acion and validation
-//
-//        if(source==searchButton) {
-////        	System.out.println(worthTextField.getText());
-//        	
-////        	newGame.setWorth(worthTextField.getText().toFloat());
-//        	//validation
-//
-//        	
-//        	//walidacja danych
-//        	if(NumericValidator.verifyAmount(worthTextField.getText())){
-//        		
-//        		//konwersja otrzymanych dane na dane do db
-//        		String amountString = worthTextField.getText().replaceAll(",", ".");
-//        		Float amount = Float.parseFloat(amountString);
-//        		
+    	float maxWorth;
+    	float minWorth;
+    	String name;
+    	List<Game> games;
+
+        if(source==searchButton) {
+        	//walidacja danych
+        	//TODO walidacja - opcja pustych danych, opcja max<min
+        	if(NumericValidator.verifyAmount(worthMaxTextField.getText()) &&
+        			NumericValidator.verifyAmount(worthMinTextField.getText())){
+        		
+        		//konwersja otrzymanych dane na dane do db
+        		String maxWorthString = worthMaxTextField.getText().replaceAll(",", ".");
+        		maxWorth = Float.parseFloat(maxWorthString);
+
+        		String minWorthString = worthMinTextField.getText().replaceAll(",", ".");
+        		minWorth = Float.parseFloat(minWorthString);
+        		
+        		name = nameTextField.getText();
+        		
+        		games = GameRepository.searchForGames(name, minWorth, maxWorth);
+        		
+        		//TODO wyœwietlenie danych
+        		//TODO dodaæ JTable z za³adowanym GameTableModel
+        		
+        		//TODO za³¹dowaæ dane to JTable i wyœwietliæ
+        		
+        		
+        		
+        		
 //            	Game newGame = new Game();
 //            	newGame.setName(nameTextField.getText());
 //            	newGame.setWorth(amount);
@@ -102,13 +132,12 @@ public class WSearching extends JFrame implements ActionListener {
 //                WAdding wAdding = new WAdding();
 //                wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //                wAdding.setVisible(true);
-//        	}else{
+        	}else{
 //        		//#TODO lepsze notice'y
-////            	System.out.println("informacja o b³êdzie w otrzymanych danych");
-//            	JOptionPane.showMessageDialog(null,"Wprowadzone dane s¹ nieprawid³owe");
-//        	}
-//        	
-//        }
+//            	System.out.println("informacja o b³êdzie w otrzymanych danych");
+            	JOptionPane.showMessageDialog(null,"Wprowadzone dane s¹ nieprawid³owe");
+        	}
+        }
     }
 }
 
