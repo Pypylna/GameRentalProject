@@ -7,6 +7,8 @@ import Repository.GameRepository;
 import Validators.NumericValidator;
 import TableModels.GameTableModel;
 
+import javax.swing.table.*;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -24,6 +26,7 @@ public class WSearching extends JFrame implements ActionListener {
     private JButton searchButton;
     private JTable gamesTable;
     private GameTableModel gameTModel;
+    private JScrollPane scrollTable;
 
     WSearching() {
         setSize(500, 500);
@@ -45,6 +48,8 @@ public class WSearching extends JFrame implements ActionListener {
         
         gameTModel = new GameTableModel();
         gamesTable = new JTable(gameTModel);
+        scrollTable = new JScrollPane(gamesTable);
+        
 
         layout.setVerticalGroup(
             layout.createSequentialGroup()
@@ -62,7 +67,7 @@ public class WSearching extends JFrame implements ActionListener {
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(searchButton))
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                    .addComponent(gamesTable))
+                    .addComponent(scrollTable))
 
         );
 
@@ -80,12 +85,11 @@ public class WSearching extends JFrame implements ActionListener {
                 		              	.addComponent(worthMaxTextField)
                 		              	.addComponent(worthMinTextField)
                                         .addComponent(searchButton)
-                                        .addComponent(gamesTable))
+                                        .addComponent(scrollTable))
 		            )))
-
         ;
         
-        //TODO dlaczego nie wyœwietla siê gamesTable???
+        
 
         //TODO DodaÄ‡ odpowiednie pola tekstowe i etykiety do wpisywania danych do bazy
     }
@@ -114,21 +118,10 @@ public class WSearching extends JFrame implements ActionListener {
         		
         		games = GameRepository.searchForGames(name, minWorth, maxWorth);
         		
-        		//TODO wyœwietlenie danych
-        		//TODO dodaæ JTable z za³adowanym GameTableModel
-        		
-        		//TODO za³¹dowaæ dane to JTable i wyœwietliæ
+        		gameTModel.setModelData(games);
+        		gameTModel.fireTableDataChanged();
         		
         		
-        		
-        		
-//            	Game newGame = new Game();
-//            	newGame.setName(nameTextField.getText());
-//            	newGame.setWorth(amount);
-//
-//            	newGame.addGameToDb();
-//            	JOptionPane.showMessageDialog(null,"Pozycja dodana do bazy danych");
-//            	
 //                WAdding wAdding = new WAdding();
 //                wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //                wAdding.setVisible(true);
