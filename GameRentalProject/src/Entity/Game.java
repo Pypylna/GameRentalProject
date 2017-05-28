@@ -5,11 +5,12 @@ package Entity;
 //import java.sql.Statement;
 import java.sql.*;
 import Model.dbConnection;
+import Repository.GameRepository;
 
 public class Game {
 //#todo uzupelnic klase o pozostale pola i metody
 	//#todo gettery i settery do name i worth
-	
+	private static float MAXWORTH = 10000;
 	private int id;
 	private String name;
 	private float worth;		//wartosc
@@ -41,7 +42,7 @@ public class Game {
 	
 	
     public void addGameToDb() {
-    	int newId = Game.getFirstFreeId();
+    	int newId = GameRepository.getFirstFreeId();
     	this.setId(newId);
     	
         Connection polaczenie = dbConnection.connect();
@@ -64,32 +65,23 @@ public class Game {
             System.out.println("Nie mogê dodaæ danych " + e.getMessage());
         }
      }
+
     
-    
-    public static int getFirstFreeId(){
-    	int id=0;
+    public static float convertMaxWorth(String maxWorth){
+    	float maxW;
     	
-    	Connection polaczenie = dbConnection.connect();
-        Statement stat = null;
-        try {
-            stat = polaczenie.createStatement();
-            //automatyczne nadawanie id
-            String SQL = "SELECT MAX(id) AS max FROM game";
-            
-            ResultSet wynik = stat.executeQuery(SQL);
-            id = wynik.getInt("max");
-            
-            wynik.close();
-            stat.close();
-            polaczenie.close();
-            // Komunikat i wydrukowanie koñcowej formy polecenia SQL
-            System.out.println("Polecenie: \n" + SQL + "\n wykonane.");
-        } catch (Exception e) {
-            System.out.println("B³¹d przy sprawdzaniu max id " + e.getMessage());
-        }
+    	if(maxWorth.isEmpty()) maxW = Game.MAXWORTH;
+		else maxW = Float.parseFloat(maxWorth.replaceAll(",", "."));
     	
-    	return id+1;
+    	return maxW;
     }
     
-    
+    public static float convertMinWorth(String minWorth){
+    	float minW;
+    	
+    	if(minWorth.isEmpty()) minW = 0;
+		else minW = Float.parseFloat(minWorth.replaceAll(",", "."));
+    	
+    	return minW;
+    }
 }

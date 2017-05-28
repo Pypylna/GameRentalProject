@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import Entity.Game;
 import Repository.GameRepository;
+import Validators.GameSearcherValidator;
 import Validators.NumericValidator;
 import TableModels.GameTableModel;
 
@@ -86,11 +87,7 @@ public class WSearching extends JFrame implements ActionListener {
                 		              	.addComponent(worthMinTextField)
                                         .addComponent(searchButton)
                                         .addComponent(scrollTable))
-		            )))
-        ;
-        
-        
-
+		            )));
         //TODO DodaÄ‡ odpowiednie pola tekstowe i etykiety do wpisywania danych do bazy
     }
     @Override
@@ -103,28 +100,16 @@ public class WSearching extends JFrame implements ActionListener {
 
         if(source==searchButton) {
         	//walidacja danych
-        	//TODO walidacja - opcja pustych danych, opcja max<min
-        	if(NumericValidator.verifyAmount(worthMaxTextField.getText()) &&
-        			NumericValidator.verifyAmount(worthMinTextField.getText())){
-        		
-        		//konwersja otrzymanych dane na dane do db
-        		String maxWorthString = worthMaxTextField.getText().replaceAll(",", ".");
-        		maxWorth = Float.parseFloat(maxWorthString);
-
-        		String minWorthString = worthMinTextField.getText().replaceAll(",", ".");
-        		minWorth = Float.parseFloat(minWorthString);
-        		
-        		name = nameTextField.getText();
-        		
+        	//TODO walidacja - dodaæ do funkcji przy poszerzeniu klasy Game
+        	maxWorth = Game.convertMaxWorth(worthMaxTextField.getText());
+        	minWorth = Game.convertMinWorth(worthMinTextField.getText());
+    		name = nameTextField.getText();
+        	
+        	if(GameSearcherValidator.validate(name, minWorth, maxWorth)){
         		games = GameRepository.searchForGames(name, minWorth, maxWorth);
         		
         		gameTModel.setModelData(games);
         		gameTModel.fireTableDataChanged();
-        		
-        		
-//                WAdding wAdding = new WAdding();
-//                wAdding.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                wAdding.setVisible(true);
         	}else{
 //        		//#TODO lepsze notice'y
 //            	System.out.println("informacja o b³êdzie w otrzymanych danych");
