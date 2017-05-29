@@ -10,6 +10,7 @@ import TableModels.GameTableModel;
 
 import javax.swing.table.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class WSearching extends JFrame implements ActionListener {
     private JLabel titleLabel, nameLabel, worthMaxLabel, worthMinLabel;
     private JTextField nameTextField ;
     private JTextField worthMaxTextField, worthMinTextField;
-    private JButton searchButton;
+    private JButton searchButton, saveButton;
     private JTable gamesTable;
     private GameTableModel gameTModel;
     private JScrollPane scrollTable;
@@ -46,6 +47,8 @@ public class WSearching extends JFrame implements ActionListener {
         
         searchButton = new JButton("Search");
         searchButton.addActionListener(this);
+        saveButton = new JButton("Save changes");
+        saveButton.addActionListener(this);
         
         gameTModel = new GameTableModel();
         gamesTable = new JTable(gameTModel);
@@ -69,6 +72,8 @@ public class WSearching extends JFrame implements ActionListener {
                     .addComponent(searchButton))
                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(scrollTable))
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                    .addComponent(saveButton))
 
         );
 
@@ -86,7 +91,8 @@ public class WSearching extends JFrame implements ActionListener {
                 		              	.addComponent(worthMaxTextField)
                 		              	.addComponent(worthMinTextField)
                                         .addComponent(searchButton)
-                                        .addComponent(scrollTable))
+                                        .addComponent(scrollTable)
+                                        .addComponent(saveButton))
 		            )));
         //TODO DodaÄ‡ odpowiednie pola tekstowe i etykiety do wpisywania danych do bazy
     }
@@ -115,6 +121,15 @@ public class WSearching extends JFrame implements ActionListener {
 //            	System.out.println("informacja o b³êdzie w otrzymanych danych");
             	JOptionPane.showMessageDialog(null,"Wprowadzone dane s¹ nieprawid³owe");
         	}
+        }
+        if(source==saveButton){
+        	int[] array = gameTModel.getEditedGamesIds();
+        	//TODO ³adniejsze drukowanie zmienionych id
+        	//?? Czy mo¿e pomin¹æ wymienianie tych ids?
+        	JOptionPane.showMessageDialog(null,"Czy na pewno chcesz zmieniæ nastêpuj¹ce gry:\nids: "
+        			+ Arrays.toString(array));
+        	
+        	//TODO walidacja i dodanie zmian do bazy danych
         }
     }
 }
